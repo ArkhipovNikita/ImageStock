@@ -1,0 +1,40 @@
+{% extends 'author_detail.html' %}
+
+{% block block %}
+    <div class="py-4 px-4">
+        <div class="d-flex align-items-center justify-content-between mb-3"></div>
+        <div class="row">
+        <div class="card-deck">
+            {% for collection in object_list %}
+                <div class="card">
+                    <img class="card-img-top" src="{{ collection.cover.url }}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ collection.name }}</h5>
+                        <a href="{% url 'collection_detail' collection.id %}" class="btn btn-primary">View</a>
+    {#                  <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>#}
+    {#                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>#}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        </div>
+        <!-- pagination -->
+        <div class="pagination mt-4">
+            <span class="step-links mx-auto">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="btn btn-secondary">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-secondary">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="btn btn-secondary">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-secondary">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+{% endblock %}

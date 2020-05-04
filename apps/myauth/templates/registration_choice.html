@@ -1,0 +1,8 @@
+{% extends 'wrapper.html' %}
+
+{% block block %}
+    <div class="d-flex justify-content-center mt-5">
+        <a href="{% url 'registration_author' %}" class="btn btn-light mr-5 p-3">I'm an author</a>
+        <a href="{% url 'registration_consumer' %}" class="btn btn-dark p-3">I'm a consumer</a>
+    </div>
+{% endblock %}

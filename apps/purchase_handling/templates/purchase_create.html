@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="login-form">
+        <div class="cotainer">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        {% if title %}
+                            <div class="card-header">{{ title }}</div>
+                        {% endif %}
+                        <div class="card-body">
+                            <form action="{% url 'purchase_create' image_id %}" method="post">
+                                {% csrf_token %}
+                                <p>Here must be entering card details for payment</p>
+                                <div class="col-md-6 offset-md-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        Buy
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'wrapper.html' %}
+{% load widget_tweaks %}
+
+{% block block %}
+    <form action="{% url 'author_update' user.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
+        {% for hidden_field in form.hidden_fields %}
+            {{ hidden_field }}
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% for field in form.visible_fields %}
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label text-md-right" for="{{ field.auto_id }}">{{ field.label }}</label>
+                <div class="col-md-6">
+                    {% if form.is_bound %}
+                        {% if field.errors %}
+                            {% render_field field class="form-control is-invalid" %}
+                            {% for error in field.errors %}
+                                <div class="invalid-feedback">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% render_field field class="form-control is-valid" %}
+                        {% endif %}
+                    {% else %}
+                        {% render_field field class="form-control" %}
+                    {% endif %}
+
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+          </div>
+        {% endfor %}
+
+        <div class="col-md-6 offset-md-4">
+            <button type="submit" class="btn btn-primary">
+                Update
+            </button>
+        </div>
+    </form>
+    <div class="col-md-6 offset-md-4 d-flex flex-column">
+        <a href="{% url 'password_change' %}" class="mt-2">Change password</a>
+        <a href="{% url 'password_reset' %}" class="mt-2">Reset password</a>
+    </div>
+{% endblock %}

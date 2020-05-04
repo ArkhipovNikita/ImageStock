@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load project_tags %}
+
+{% block content %}
+    <style>
+        .profile-header {
+            transform: translateY(5rem);
+        }
+
+        main {
+            background: #654ea3;
+            background: -webkit-linear-gradient(to right, #654ea3, #eaafc8);
+            background: linear-gradient(to right, #654ea3, #eaafc8);
+            min-height: 100vh;
+        }
+    </style>
+    <div class="row py-5 px-4">
+        <div class="col-xl-4 col-md-6 col-sm-10 mx-auto">
+            <div class="bg-white shadow rounded overflow-hidden">
+                <div class="px-4 pt-0 pb-4 bg-dark">
+                    <div class="media align-items-end profile-header">
+                        <div class="profile mr-3">
+                            <img src="{{ object.avatar.url }}" alt="..." width="130" class="rounded mb-2 img-thumbnail">
+                            {% if user|has_group:'Authors' and is_owner %}
+                                <a href="{% url 'author_update' user.id %}" class="btn btn-dark btn-sm btn-block">Edit profile</a>
+                            {% elif not is_followed %}
+                                <form action="{% url 'subscribe' author.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-primary btn-sm btn-block">Follow</button>
+                                </form>
+                            {% else %}
+                                 <form action="{% url 'unsubscribe' author.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-outline-secondary btn-sm btn-block">Unfollow</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                        <div class="media-body mb-5 text-white">
+                            <h4 class="mt-0 mb-0">{{ object.username }}</h4>
+                            <p class="small mb-4">
+                                <i class="fa fa-map-marker mr-2"></i>
+                                {{ object.first_name }}
+                                {{ object.last_name }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-light p-4 d-flex justify-content-end text-center">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <h5 class="font-weight-bold mb-0 d-block">{{ subscribers_amount }}</h5><small class="text-muted"> <i class="fa fa-user-circle-o mr-1"></i>Followers</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <a href="{% url 'author_detail_image' author.id %}" class="{% if section == 'images' %} btn-secondary disabled {% else %} btn-primary {% endif %} btn btn-lg" role="button">
+                            Images
+                        </a>
+                        <a href="{% url 'author_detail_collection' author.id %}" class="{% if section == 'collections' %} btn-secondary disabled {% else %} btn-primary {% endif %} btn btn-lg"  role="button">
+                            Collections
+                        </a>
+                    </div>
+                </div>
+                {% block block %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

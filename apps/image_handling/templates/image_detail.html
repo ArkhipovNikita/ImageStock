@@ -1,0 +1,38 @@
+{% extends 'wrapper.html' %}
+{% load project_tags %}
+
+{% block block %}
+    <div class="d-flex flex-row justify-content-between">
+        <div class="mr-5">
+            <img src="{{ object.original.url }}" alt="" class="img-fluid rounded shadow-sm">
+        </div>
+        <div class="d-flex flex-column">
+            <h5>Author:</h5>
+            <a href="{% url 'author_detail_image' object.author.id %}"><p>{{ object.author.username }}</p></a>
+            <h5>Name:</h5>
+            <p>{{ object.name }}</p>
+            <h5>Description:</h5>
+            <p>{{ object.description }}</p>
+            <h5>Category:</h5>
+            <p>{{ object.category }}</p>
+            <h5>Tags:</h5>
+            <ul>
+                {% for tag in object.tags.all %}
+                <li>{{ tag.name }}</li>
+                {% endfor %}
+            </ul>
+            <h5>Price:</h5>
+            <p>{{ object.price }} $</p>
+            {% if user|has_group:'Authors' %}
+                <h5>Purchase count:</h5>
+                <p>{{ object.purchase_count }}</p>
+                <a href="{% url 'image_update'  object.id %}" class="btn btn-primary">Update</a>
+            {% elif not is_bought %}
+                 <a href="{% url 'purchase_create'  object.id %}" class="btn btn-primary">Buy</a>
+            {% else %}
+                <p>You have already bought it!</p>
+                <a href="#" class="btn btn-outline-primary disabled">Download</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
